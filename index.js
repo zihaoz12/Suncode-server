@@ -8,7 +8,7 @@ app.use(express.json())
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
 require('./DB/db')(app)
-require('./routes/admin')(app)
+require('./routes/admin/index')(app)
 
 
 
