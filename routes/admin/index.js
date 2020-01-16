@@ -36,7 +36,7 @@ module.exports = app =>{
          req.Model = require(`../../models/${modelName}`)
         next()
     }, router);
-
+    
     const multer = require('multer');
     const upload = multer({ dest: __dirname + '../../../uploads'})
     app.post('/admin/api/upload', upload.single('file'), async(req,res)=>{
@@ -45,4 +45,9 @@ module.exports = app =>{
         res.send(file)
     })
 
+    app.use('/admin/api/rest/:resource',async (req,res,next)=>{
+        const modelName = require('inflection').classify(req.params.resource)
+            req.Model = require(`../../models/${modelName}`)
+        next()
+    },router);
 }
