@@ -50,4 +50,32 @@ module.exports = app =>{
             req.Model = require(`../../models/${modelName}`)
         next()
     },router);
+
+    //Login
+    app.post('/admin/api/login', async (req,res)=>{
+        const {username, password} = req.body
+        //1 find admin by username
+        const AdminUser = require('../../models/Admin')
+        const user = await AdminUser.findOne({ username }).select('+password') // in model select:false
+        if(!user){
+            return res.status(422).send({
+                message: 'This Admin does not existed'
+            })
+        }
+        //2 check password 
+        const isValid = require('bcrypt').compareSync(password, user.password)
+        if(!isValid){
+            return res.status(422).send({
+                message: 'Password Incorrect!'
+            })
+        }
+        //3.return token  
+        //npm i jsonwebtoken
+        const jwt = require('jsonwebtoken');
+        const token = jwt.sign({
+            id: user._id,
+        }, app.get('secret'))
+        res.send({token})
+    })
+
 }
