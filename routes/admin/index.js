@@ -69,13 +69,14 @@ module.exports = app =>{
                 message: 'Password Incorrect!'
             })
         }
-        //3.return token  
+        //3.return token, user
         //npm i jsonwebtoken
         const jwt = require('jsonwebtoken');
         const token = jwt.sign({
-            id: user._id,
+            id: user._id
         }, app.get('secret'))
-        res.send({token})
+        
+        res.send({token,user})
     })
 
 }
